@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "e1e85f56-4b58-49ad-b953-5725c72edd2d",
+		"name": "java-jdev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "listaTodosUsuarios",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local8080}}/listaTodosUsuarios",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"listaTodosUsuarios"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "salvaUsuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"\",\n    \"idade\": 0\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local8080}}/salvaUsuario",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"salvaUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletaUsuarioPathVariable",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{local8080}}/deletaUsuario/{id}",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"deletaUsuario",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletaUsuarioRequestParam",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{local8080}}/deletaUsuario/{id}",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"deletaUsuario",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
