@@ -41,7 +41,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"nome\": \"\",\n    \"idade\": 0\n}",
+					"raw": "{\n    \"nome\": \"Negresco\",\n    \"idade\": 7\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -61,6 +61,32 @@
 			"response": []
 		},
 		{
+			"name": "atualizaUsuario",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"nome\": \"Saulo\",\n    \"idade\": 35\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local8080}}/atualizaUsuario",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"atualizaUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "deletaUsuarioPathVariable",
 			"request": {
 				"method": "DELETE",
@@ -70,13 +96,13 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "{{local8080}}/deletaUsuario/{id}",
+					"raw": "{{local8080}}/deletaUsuario/2",
 					"host": [
 						"{{local8080}}"
 					],
 					"path": [
 						"deletaUsuario",
-						"{id}"
+						"2"
 					]
 				}
 			},
@@ -88,17 +114,100 @@
 				"method": "DELETE",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": ""
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idUsuario",
+							"value": "3",
+							"type": "default"
+						}
+					]
 				},
 				"url": {
-					"raw": "{{local8080}}/deletaUsuario/{id}",
+					"raw": "{{local8080}}/deletaUsuario",
 					"host": [
 						"{{local8080}}"
 					],
 					"path": [
-						"deletaUsuario",
-						"{id}"
+						"deletaUsuario"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listaUsuarioIdRequestParam",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idUsuario",
+							"value": "1",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{local8080}}/listaUsuarioId",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"listaUsuarioId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listaUsuarioNomeRequestParam",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "idUsuario",
+							"value": "1",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{local8080}}/listaUsuarioId",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"listaUsuarioId"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listaUsuarioIdPathVariable",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{local8080}}/listaUsuarioId/{idUsuario}",
+					"host": [
+						"{{local8080}}"
+					],
+					"path": [
+						"listaUsuarioId",
+						"{idUsuario}"
 					]
 				}
 			},
