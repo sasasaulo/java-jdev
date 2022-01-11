@@ -55,6 +55,7 @@ public class UsuarioController {
 	@ResponseBody
 	public ResponseEntity<List<Usuario>> listaUsuarioNomeRP(@RequestParam(name = "nome") String nome) {
 
+		System.out.println(nome);
 		List<Usuario> usuarios = usuarioRepository.listaPorNome(nome.trim().toLowerCase());
 
 		return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
@@ -87,16 +88,19 @@ public class UsuarioController {
 	/* Deleta usando @PathVariable */
 	@DeleteMapping("/deletaUsuario/{idUsuario}")
 	public ResponseEntity<String> deletaUsuarioPV(@PathVariable Long idUsuario) {
+		
+		System.out.println("Delete por pv - "+idUsuario);
 		usuarioRepository.deleteById(idUsuario);
 		
 		return new ResponseEntity<String>("Usuário deletado com sucesso", HttpStatus.OK);
 	}
 	
 	/* Deleta usando @RequestParam */
-	@DeleteMapping(value = "deletaUsuario")
+	@DeleteMapping(value = "/deletaUsuario")
 	@ResponseBody /* Descrição da resposta */
-	public ResponseEntity<String> deletaUsuarioRP(@RequestParam Long idUsuario) {
+	public ResponseEntity<String> deletaUsuarioRP(@RequestParam(name = "idUsuario") Long idUsuario) {
 
+		System.out.println(idUsuario);
 		usuarioRepository.deleteById(idUsuario);
 
 		return new ResponseEntity<String>("Usuário deletado com sucesso", HttpStatus.OK);

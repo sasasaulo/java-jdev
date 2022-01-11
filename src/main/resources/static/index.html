@@ -10,6 +10,18 @@
 
 
 	<title>Jdev - Spring boot rest API CRUD</title>
+	<style type="text/css">
+		html {
+			margin-left: 3%;
+			margin-right: 3%;
+			margin-top: 3%;
+		}
+		
+		div#divTable {
+			height: 300px;
+			overflow: scroll;
+		}
+	</style>
 </head>
 
 <body>
@@ -34,16 +46,172 @@
 	</form>
 
 	<button type="button" class="btn btn-primary" onclick="salvarUsuario()">Salvar</button>
+	<button type="button" class="btn btn-danger" onclick="botaoDeletarDaTela()">Excluir</button>
+	<button type="button" class="btn btn-secondary"
+		onclick="document.getElementById('formCadastroUsuario').reset()">Limpar</button><br><br>
+	<button type="button" class="btn btn-warning" data-bs-toggle="modal"
+		data-bs-target="#modalPesquisaUsuario">Pesquisar</button>
+
+
+	<div class="modal fade" id="modalPesquisaUsuario" tabindex="-1" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Pesquisa de usuário</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="mb-3">
+							<label for="nomeBusca" class="col-form-label">Informe o nome ou deixe em branco para buscar
+								todos:</label>
+							<input type="text" class="form-control" id="nomeBusca">
+						</div>
+						<button type="button" class="btn btn-success" onclick="pesquisaUsuario()">Buscar</button>
+					</form>
+					<br>
+					<div id="divTable">
+						<table class="table" id="tabelaResultados">
+							<thead>
+								<tr>
+									<th scope="col">ID</th>
+									<th scope="col">Nome</th>
+									<th scope="col">Idade</th>
+									<th scope="col">Editar</th>
+									<th scope="col">Deletar</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 
 	<script type="text/javascript">
 		function salvarUsuario() {
-			
+
 			var id = $("#idUsuario").val();
 			var nome = $("#nomeUsuario").val();
 			var idade = $("#idadeUsuario").val();
-			
-			alert(nome + " - " + id + " - " + idade);
+
+			if (nome != null && nome.trim() != "" && idade != null && idade.trim() != "") {
+				$.ajax({
+					method: "POST",
+					url: "salvaUsuario",
+					data: JSON.stringify({id: id, nome: nome, idade: idade}),
+					contentType: "application/json; charset=utf-8",
+					success: function (response) {
+						$('#idUsuario').val(response.id);
+						alert("Dados salvos");
+					}
+				}).fail(function (xhr, status, errorThrown) {
+					alert("Erro ao salvar: " + xhr.responseText);
+				})
+			} else {
+				alert("Preencha nome e idade");
+				$("#nomeUsuario").focus();
+			}
 		}
+
+		function pesquisaUsuario() {
+
+			var nome = $("#nomeBusca").val();
+
+			if (nome != null && nome.trim() != "") {
+				//pesquisa pela parte do nome
+				$.ajax({
+					method: "GET",
+					url: "listaUsuarioNome",
+					data: "nome=" + nome,
+					contentType: "application/json; charset=utf-8",
+					success: function (response) {
+						$('#tabelaResultados > tbody > tr').remove();
+
+						for (var i = 0; i < response.length; i++) {
+							$('#tabelaResultados > tbody').append('<tr id="' + response[i].id + '"><td>' + response[i].id + '</td><td>' + response[i].nome + '</td><td>' + response[i].idade + '</td><td><button type="button" class="btn btn-primary" onclick="editaUsuario(' + response[i].id + ')">Editar</button></td><td><button type="button" class="btn btn-danger" onclick="deletaUsuario(' + response[i].id + ')">Excluir</button></td></tr>')
+						}
+					}
+				}).fail(function (xhr, status, errorThrown) {
+					alert("Erro ao buscar: " + xhr.responseText);
+				})
+			} else {
+				//Pesquisa todos usuários
+				$.ajax({
+					method: "GET",
+					url: "listaTodosUsuarios",
+					contentType: "application/json; charset=utf-8",
+					success: function (response) {
+						$('#tabelaResultados > tbody > tr').remove();
+
+						for (var i = 0; i < response.length; i++) {
+							$('#tabelaResultados > tbody').append('<tr id="' + response[i].id + '"><td>' + response[i].id + '</td><td>' + response[i].nome + '</td><td>' + response[i].idade + '</td><td><button type="button" class="btn btn-primary" onclick="editaUsuario(' + response[i].id + ')">Editar</button></td><td><button type="button" class="btn btn-danger" onclick="deletaUsuario(' + response[i].id + ')">Excluir</button></td></tr>')
+						}
+					}
+				}).fail(function (xhr, status, errorThrown) {
+					alert("Erro ao buscar todos: " + xhr.responseText);
+				})
+			}
+		}
+
+		function editaUsuario(id) {
+
+			$.ajax({
+				method: "GET",
+				url: "listaUsuarioId",
+				data: "idUsuario=" + id,
+				contentType: "application/json; charset=utf-8",
+				success: function (response) {
+
+					$("#idUsuario").val(response.id);
+					$("#nomeUsuario").val(response.nome);
+					$("#idadeUsuario").val(response.idade);
+
+					$("#modalPesquisaUsuario").modal('hide');
+				}
+			}).fail(function (xhr, status, errorThrown) {
+				alert("Erro ao buscar usuário por id: " + xhr.responseText);
+			})
+		}
+
+		function deletaUsuario(id) {
+
+			if (confirm("Deseja realmente excluir?")) {
+				$.ajax({
+					method: "DELETE",
+					url: "deletaUsuario/" + id,
+					//data: "idUsuario=" + id,    //desse jeito não funcionou... não sei o porquê. 
+					contentType: "application/json; charset=utf-8",
+					success: function (response) {
+
+						$('#' + id).remove();
+						alert(response);
+					}
+				}).fail(function (xhr, status, errorThrown) {
+					alert("Erro ao deletar usuário: " + xhr.responseText);
+				})
+			}
+		}
+
+		function botaoDeletarDaTela() {
+
+			if ($("#idUsuario").val() != null && $("#idUsuario").val().trim() != "") {
+				var id = $('#idUsuario').val();
+				deletaUsuario(id);
+				document.getElementById('formCadastroUsuario').reset()
+			} else {
+				alert("Escolha um usuário para deletar")
+				$("#nomeUsuario").focus();
+			}
+		}
+
 	</script>
 
 	<!-- JQuery -->
